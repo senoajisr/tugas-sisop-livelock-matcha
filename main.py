@@ -17,16 +17,15 @@ def run():
 
     logging.info("Running the simulation")
 
-    resources: [_thread.LockType] = [threading.Lock(), threading.Lock()]
-
-    socrates: threading.Thread = threading.Thread(target=philiosopher, name="Socrates", args=[resources, 0, 1])
+    socrates: threading.Thread = threading.Thread(target=philiosopher, name="Socrates", args=[])
     logging.info("Socrates is entering the diner")
     socrates.start()
 
 
-def philiosopher(resources: [_thread.LockType], first_resource: int, second_resource: int):
+def philiosopher():
     """
     Purpose: grab the first resource and release it if it cannot grab the second resource.
+    If it can grab both, then dine. Afterwards, place the resource back.
     """
 
     thread_name: str = threading.current_thread().name
