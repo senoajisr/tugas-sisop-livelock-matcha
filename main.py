@@ -19,11 +19,14 @@ def run():
 
     socrates: threading.Thread = threading.Thread(target=philiosopher, name="Socrates", args=[chopstick_a, chopstick_b])
     alcibiades: threading.Thread = threading.Thread(target=philiosopher, name="Alcibiades", args=[chopstick_b, chopstick_a])
+    pythagoras: threading.Thread = threading.Thread(target=philiosopher, name="Pythagoras", args=[chopstick_a, chopstick_b])
 
     logging.info("Socrates is entering the diner")
     socrates.start()
     logging.info("Alcibiades is entering the diner")
     alcibiades.start()
+    logging.info("Pythagoras is entering the diner")
+    pythagoras.start()
 
     socrates.join(timeout=5)
     alcibiades.join(timeout=5)
