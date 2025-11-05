@@ -17,36 +17,47 @@ def run():
 
     logging.info("Running the simulation")
 
-    socrates: threading.Thread = threading.Thread(target=philiosopher, name="Socrates", args=[])
+    socrates: threading.Thread = threading.Thread(target=philiosopher, name="Socrates", args=[chopstick_a, chopstick_b])
+    alcibiades: threading.Thread = threading.Thread(target=philiosopher, name="Alcibiades", args=[chopstick_b, chopstick_a])
+
     logging.info("Socrates is entering the diner")
     socrates.start()
+    logging.info("Alcibiades is entering the diner")
+    alcibiades.start()
+
+    socrates.join(timeout=5)
+    alcibiades.join(timeout=5)
 
 
-def philiosopher():
+def philiosopher(chopstick_one: threading.Lock, chopstick_two: threading.Lock):
     """
     Purpose: grab the first resource and release it if it cannot grab the second resource.
     If it can grab both, then dine. Afterwards, place the resource back.
     """
 
     thread_name: str = threading.current_thread().name
-    logging.info(f"{thread_name} is on the chair")
-
-    with chopstick_a:
-        logging.info(f"{thread_name} has grabbed lock_a")
-
-        if chopstick_b.acquire(blocking=False):
-            try:
-                logging.info(f"{thread_name} has grabbed lock_b")
-                logging.info(f"{thread_name} is now eating")
-                time.sleep(0.1)
-                logging.info(f"{thread_name} has finished eating")
-            finally:
-                chopstick_b.release()
-        else:
-            chopstick_a.release()
-            logging.info(f"{thread_name} has released lock_a")
-    
-    logging.info(f"{thread_name} is now leaving the diner")
+   
+    logging.info(f"{thread_name} trying to grab {chopstick_one}")
+    if chopstick_one.acquire(blocking=True):
+        try:
+            logging.info(f"{thread_name} has grabbed {chopstick_one}")
+            time.sleep(5)
+            
+            logging.info(f"{thread_name} trying to grab {chopstick_two}")
+            if chopstick_two.acquire(blocking=False):
+                try:
+                    logging.info(f"{thread_name} has grabbed {chopstick_two}")
+                    logging.info(f"{thread_name} is now eating")
+                    time.sleep(5)
+                    logging.info(f"{thread_name} has finished eating")
+                finally:
+                    chopstick_two.release()
+            else:
+                chopstick_one.release()
+                logging.info(f"{thread_name} has released {chopstick_one}")
+                philiosopher(chopstick_a, chopstick_b)
+        finally:
+            logging.info(f"{thread_name} is now leaving the diner")
             
 
 
