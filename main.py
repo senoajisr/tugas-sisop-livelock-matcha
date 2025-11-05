@@ -4,8 +4,8 @@ import _thread
 import time
 
 
-lock_a: threading.Lock = threading.Lock()
-lock_b: threading.Lock = threading.Lock()
+chopstick_a: threading.Lock = threading.Lock()
+chopstick_b: threading.Lock = threading.Lock()
 
 
 def run():
@@ -35,16 +35,16 @@ def philiosopher(resources: [_thread.LockType], first_resource: int, second_reso
     with resources[first_resource]:
         logging.info(f"{thread_name} has grabbed lock_a")
 
-        if lock_b.acquire(blocking=False):
+        if chopstick_b.acquire(blocking=False):
             try:
                 logging.info(f"{thread_name} has grabbed lock_b")
                 logging.info(f"{thread_name} is now eating")
                 time.sleep(0.1)
                 logging.info(f"{thread_name} has finished eating")
             finally:
-                lock_b.release()
+                chopstick_b.release()
         else:
-            lock_a.release()
+            chopstick_a.release()
             logging.info(f"{thread_name} has released lock_a")
     
     logging.info(f"{thread_name} is now leaving the diner")
