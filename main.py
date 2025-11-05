@@ -31,7 +31,7 @@ def philiosopher():
     thread_name: str = threading.current_thread().name
     logging.info(f"{thread_name} is on the chair")
 
-    with resources[first_resource]:
+    with chopstick_a:
         logging.info(f"{thread_name} has grabbed lock_a")
 
         if chopstick_b.acquire(blocking=False):
