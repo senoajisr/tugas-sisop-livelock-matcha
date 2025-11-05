@@ -22,6 +22,7 @@ def run():
     format = "%(asctime)s: %(message)s"
     logging.basicConfig(format=format, level=logging.INFO, datefmt="%H:%M:%S")
 
+    logging.info("Made by team Matcha for 'Tugas - Sistem Operasi - IFX-48-GAB'")
     logging.info("Running the simulation")
 
     socrates: threading.Thread = threading.Thread(target=philiosopher, name="Socrates", args=[chopstick_a, chopstick_b])
