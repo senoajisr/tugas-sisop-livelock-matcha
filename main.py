@@ -1,6 +1,5 @@
 import threading
 import logging
-import _thread
 import time
 
 sleep_time: int = 1
